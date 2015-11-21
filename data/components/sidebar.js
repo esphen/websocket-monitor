@@ -51,12 +51,16 @@ var Sidebar = React.createClass({
       TabPanel({className: "payload", key: "payload",
         title: Locale.$STR("websocketmonitor.Payload")},
         PayloadTab(this.props)
-      ),
-      TabPanel({className: "editResend", key: "editResend",
-        title: Locale.$STR("websocketmonitor.EditResend")},
-        EditResendTab(this.props)
       )
     ];
+
+    if (selectedFrame && selectedFrame.sent) {
+      tabs.push(
+        TabPanel({className: "editResend", key: "editResend",
+          title: Locale.$STR("websocketmonitor.EditResend")},
+          EditResendTab(this.props)
+      ));
+    }
 
     if (selectedFrame && selectedFrame.socketIo) {
       tabs.push(
