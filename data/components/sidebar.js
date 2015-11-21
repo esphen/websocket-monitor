@@ -15,6 +15,7 @@ const { Tabs, TabPanel } = createFactories(require("reps/tabs"));
 const { DetailsTab } = createFactories(require("./details-tab"));
 const { StackTab } = createFactories(require("./stack-tab"));
 const { PayloadTab } = createFactories(require("./payload-tab"));
+const { EditResendTab } = createFactories(require("./edit-resend-tab"));
 const { SocketIOTab } = createFactories(require("./socketio-tab"));
 const { SockJSTab } = createFactories(require("./sockjs-tab"));
 const { JSONTab } = createFactories(require("./json-tab"));
@@ -50,6 +51,10 @@ var Sidebar = React.createClass({
       TabPanel({className: "payload", key: "payload",
         title: Locale.$STR("websocketmonitor.Payload")},
         PayloadTab(this.props)
+      ),
+      TabPanel({className: "editResend", key: "editResend",
+        title: Locale.$STR("websocketmonitor.EditResend")},
+        EditResendTab(this.props)
       )
     ];
 
