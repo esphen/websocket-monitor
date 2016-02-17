@@ -1,5 +1,7 @@
 /* See license.txt for terms of usage */
 
+var isWebSocketFilterOn = false;
+
 /**
  * Handle new requests addition.
  *
@@ -17,6 +19,14 @@
  */
 window.on(EVENTS.RECEIVED_REQUEST_HEADERS, (event, from) => {
   var item = NetMonitorView.RequestsMenu.getItemByValue(from);
+
+  // We need to re-apply hidden to new list when it changes
+  if (isWebSocketFilterOn) {
+
+    // setTimeout so list finishes drawing before we reapply hidden
+    setTimeout(() => window.emit('websocketmonitor:set-websocket-filter', true));
+  }
+
   if (!isWsUpgradeRequest(item)) {
     return;
   }
@@ -102,6 +112,25 @@ window.on(EVENTS.RESPONSE_BODY_DISPLAYED, (event) => {
   link.addEventListener("click", event => {
     navigateToWebSocketPanel(item._value);
   });
+});
+
+window.on("websocketmonitor:set-websocket-filter", (event, hide) => {
+  // Find all elements that are not WS
+  var list = $(".side-menu-widget-group-list");
+  if (!list) {
+    return;
+  }
+
+  for (var i = 0; i < list.children.length; i++) {
+    var hbox = list.children[i];
+    var isWebsocket = !!hbox.querySelector('.websocket');
+
+    if (!isWebsocket) {
+      hbox.hidden = hide;
+    }
+  }
+
+  isWebSocketFilterOn = hide;
 });
 
 // Helpers
